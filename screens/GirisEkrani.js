@@ -5,25 +5,26 @@ import axios from 'axios';
 
 const GirisEkrani = ({ navigation }) => {
   const [etkinlikAdi, setEtkinlikAdi] = useState('');
-
+  const [profilAdi, setProfilAdi] = useState('');
+  
   const handleEtkinlikOlustur = async () => {
-    try {
-      // Sunucuya etkinlik adını gönder
-      const response = await axios.post('http://localhost:3000/buyukHarf', { etkinlikAdi });
+      // Sunucuya etkinlik adını ve profil adını gönder
+    const response = await axios.post('https://first-app-buyukharf-9b4c2c44b4ec.herokuapp.com/buyukHarfeCevir', { etkinlikAdi });
+    const buyukHarfliEtkinlikAdi = response.data.message;
 
-      // Sunucudan gelen cevabı al
-      const buyukHarfliEtkinlikAdi = response.data.message;
-
-      // SelamSayfasi'na yönlendir ve sunucudan gelen mesajı iletecek şekilde güncelle
-      navigation.navigate('SelamSayfasi', { mesaj: buyukHarfliEtkinlikAdi });
-    } catch (error) {
-      console.error('Sunucu hatası:', error.message);
-    }
+    // SelamSayfasi'na yönlendir ve sunucudan gelen mesajı iletecek şekilde güncelle
+    navigation.navigate('SelamSayfasi', { mesaj: `${profilAdi} ${buyukHarfliEtkinlikAdi} etkinliğini başlattı` });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
+      <TextInput
+        style={styles.input}
+        placeholder="Profil Adınızı Girin"
+        value={profilAdi}
+        onChangeText={(text) => setProfilAdi(text)}
+      />
         <TextInput
           style={styles.input}
           placeholder="Etkinlik Adı"
